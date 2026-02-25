@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Explore Events - Digital Event Organizer{% endblock %}
+
+{% block content %}
+<div class="row mb-5 animate-fade">
+    <div class="col-md-8">
+        <h2 class="fw-bold">All <span class="text-gradient">Events</span></h2>
+        <p class="opacity-50">Find your next big experience right here.</p>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card p-2 d-flex">
+            <input type="text" class="form-control glass-input bg-transparent border-0" placeholder="Search events...">
+            <button class="btn btn-glass btn-sm px-3">Filter</button>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 animate-fade">
+    {% for event in events %}
+    <div class="col-md-4">
+        <div class="glass-card h-100 overflow-hidden">
+            <div class="position-relative">
+                <img src="{{ event.image_url or 'https://images.unsplash.com/photo-1540575861501-7ad0582373f2?auto=format&fit=crop&q=80&w=600' }}"
+                    alt="{{ event.title }}" class="img-fluid w-100" style="height: 200px; object-fit: cover;">
+                <div class="position-absolute top-0 end-0 m-3">
+                    <span class="badge bg-primary rounded-pill px-3">{{ event.category }}</span>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="fw-bold mb-0">{{ event.title }}</h5>
+                    <span class="small opacity-50">{{ event.date }}</span>
+                </div>
+                <p class="small opacity-75 mb-3">{{ event.description[:80] }}...</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="small">
+                        <span class="d-block"><i class="opacity-50 small">Venue:</i> {{ event.venue }}</span>
+                        <span class="fw-bold text-gradient">{{ "Paid" if event.is_paid else "Free" }}</span>
+                    </div>
+                    <a href="/event/{{ event.event_id }}" class="btn btn-sm btn-glass">Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <p class="opacity-50">No events found matching your search.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

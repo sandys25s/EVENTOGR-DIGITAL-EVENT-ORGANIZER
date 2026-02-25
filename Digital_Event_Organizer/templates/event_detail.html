@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.title }} - Digital Event Organizer{% endblock %}
+
+{% block content %}
+<div class="row animate-fade">
+    <div class="col-lg-8 mb-4">
+        <div class="glass-card overflow-hidden">
+            <img src="{{ event.image_url or 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=1200' }}"
+                alt="{{ event.title }}" class="img-fluid w-100" style="max-height: 400px; object-fit: cover;">
+            <div class="p-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="fw-bold mb-0">{{ event.title }}</h1>
+                    <span class="badge bg-primary rounded-pill px-4 py-2">{{ event.category }}</span>
+                </div>
+
+                <h5 class="fw-bold mb-3">About this Event</h5>
+                <p class="opacity-75 lead mb-5">{{ event.description }}</p>
+
+                <div class="row g-4">
+                    <div class="col-sm-6">
+                        <div class="p-3 bg-white bg-opacity-5 rounded-4">
+                            <h6 class="opacity-50 small text-uppercase mb-1">Date & Time</h6>
+                            <p class="fw-bold mb-0">{{ event.date }} at {{ event.time }}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="p-3 bg-white bg-opacity-5 rounded-4">
+                            <h6 class="opacity-50 small text-uppercase mb-1">Venue</h6>
+                            <p class="fw-bold mb-0">{{ event.venue }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="glass-card p-4 sticky-top" style="top: 100px;">
+            <h4 class="fw-bold mb-4">Registration</h4>
+            <div class="d-flex justify-content-between mb-2">
+                <span class="opacity-75">Event Price</span>
+                <span class="fw-bold">{{ "₹ " + event.price|string if event.is_paid else "Free" }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-4">
+                <span class="opacity-75">Availability</span>
+                <span class="fw-bold">{{ event.max_participants - event.current_participants }} Slots left</span>
+            </div>
+
+            <hr class="opacity-25 mb-4">
+
+            {% if session.get('user_id') %}
+            <form action="/register_event/{{ event.event_id }}" method="POST">
+                <button type="submit" class="btn btn-glass w-100 py-3 mb-3 fw-bold" {{ 'disabled' if
+                    event.current_participants>= event.max_participants else '' }}>
+                    {{ "Register Now" if not event.is_paid else "Pay & Register" }}
+                </button>
+                <p class="small text-center opacity-50">Registration ends on {{ event.deadline.strftime('%Y-%m-%d') if
+                    event.deadline is not string else event.deadline }}</p>
+            </form>
+            {% else %}
+            <div class="text-center p-3">
+                <p class="small opacity-75 mb-4">Please login to register for this event.</p>
+                <a href="/login" class="btn btn-glass w-100 py-3">Login to Register</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

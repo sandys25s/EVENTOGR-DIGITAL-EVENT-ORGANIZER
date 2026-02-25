@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Digital Event Organizer{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center min-vh-75">
+    <div class="col-md-6 animate-fade">
+        <div class="glass-card p-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Create <span class="text-gradient">Account</span></h2>
+                <p class="opacity-50">Join us to start organizing and attending events</p>
+            </div>
+
+            <form method="POST">
+                <div class="mb-4">
+                    <label class="form-label small opacity-75">Full Name</label>
+                    <input type="text" name="name" class="form-control glass-input" placeholder="John Doe" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small opacity-75">Email Address</label>
+                    <input type="email" name="email" class="form-control glass-input" placeholder="name@example.com"
+                        required>
+                </div>
+                <div class="mb-5">
+                    <label class="form-label small opacity-75">Password</label>
+                    <input type="password" name="password" class="form-control glass-input" placeholder="••••••••"
+                        required>
+                </div>
+
+                <button type="submit" class="btn btn-glass w-100 py-3 mb-4">Create Account</button>
+
+                <p class="text-center small opacity-50 mb-0">
+                    Already have an account? <a href="/login" class="text-white text-decoration-none fw-bold">Login
+                        here</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

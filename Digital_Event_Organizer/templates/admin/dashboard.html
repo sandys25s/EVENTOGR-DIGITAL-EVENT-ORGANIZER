@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Digital Event Organizer{% endblock %}
+
+{% block content %}
+<div class="row mb-5 animate-fade">
+    <div class="col-md-8">
+        <h2 class="fw-bold">Admin <span class="text-gradient">Control Panel</span></h2>
+        <p class="opacity-50">Manage events, registrations, and platform users.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <a href="/admin/create_event" class="btn btn-glass px-4 py-2">
+            <span class="me-2">+</span> Create New Event
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5 animate-fade">
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center">
+            <h5 class="opacity-50 mb-1">Total Events</h5>
+            <h2 class="fw-bold mb-0 text-gradient">{{ events|length }}</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center">
+            <h5 class="opacity-50 mb-1">Total Users</h5>
+            <h2 class="fw-bold mb-0 text-gradient">{{ user_count }}</h2>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center">
+            <h5 class="opacity-50 mb-1">Registrations</h5>
+            <h2 class="fw-bold mb-0 text-gradient">{{ reg_count }}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="glass-card p-4 animate-fade" style="animation-delay: 0.2s;">
+    <h4 class="fw-bold mb-4">Manage Events</h4>
+    <div class="table-responsive">
+        <table class="table table-dark table-hover mb-0">
+            <thead>
+                <tr class="opacity-50">
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Price</th>
+                    <th>Participants</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr>
+                    <td>{{ event.title }}</td>
+                    <td><span class="badge bg-primary rounded-pill">{{ event.category }}</span></td>
+                    <td>{{ event.date }}</td>
+                    <td>{{ "₹" + event.price|string if event.is_paid else "Free" }}</td>
+                    <td>{{ event.current_participants }} / {{ event.max_participants }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-glass dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
+                                Options
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark glass-card border-0 p-2">
+                                <li><a class="dropdown-item rounded-2"
+                                        href="/admin/edit_event/{{ event.event_id }}">Edit</a></li>
+                                <li><a class="dropdown-item rounded-2"
+                                        href="/admin/view_participants/{{ event.event_id }}">View Participants</a></li>
+                                <li>
+                                    <hr class="dropdown-divider opacity-25">
+                                </li>
+                                <li><a class="dropdown-item rounded-2 text-danger"
+                                        href="/admin/delete_event/{{ event.event_id }}">Delete</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-4 opacity-50">No events created yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

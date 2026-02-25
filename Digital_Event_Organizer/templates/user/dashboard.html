@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard - Digital Event Organizer{% endblock %}
+
+{% block content %}
+<div class="row mb-5 animate-fade">
+    <div class="col-12">
+        <h2 class="fw-bold">Welcome back, <span class="text-gradient">{{ session['name'] }}</span>!</h2>
+        <p class="opacity-50">Here's what's happening with your events.</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-8 animate-fade" style="animation-delay: 0.1s;">
+        <div class="glass-card p-4 h-100">
+            <h4 class="fw-bold mb-4">Your Registrations</h4>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr class="opacity-50">
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reg in registrations %}
+                        <tr>
+                            <td>{{ reg.title }}</td>
+                            <td>{{ reg.date }}</td>
+                            <td><span
+                                    class="badge bg-{{ 'success' if reg.status == 'confirmed' else 'warning' }} rounded-pill">{{
+                                    reg.status }}</span></td>
+                            <td><span class="text-{{ 'success' if reg.payment_status == 'paid' else 'danger' }}">{{
+                                    reg.payment_status.capitalize() }}</span></td>
+                            <td>
+                                <a href="/event/{{ reg.event_id }}" class="btn btn-sm btn-glass">View</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 opacity-50">No registrations found. <a
+                                    href="/events" class="text-white">Explore events</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 animate-fade" style="animation-delay: 0.2s;">
+        <div class="glass-card p-4 h-100">
+            <h4 class="fw-bold mb-4">Notifications</h4>
+            <div class="notification-list" style="max-height: 400px; overflow-y: auto;">
+                {% for note in notifications %}
+                <div class="p-3 mb-3 rounded-3 {{ 'bg-white bg-opacity-10' if not note.is_read else '' }}"
+                    style="border-left: 4px solid var(--primary-color);">
+                    <p class="small mb-1">{{ note.message }}</p>
+                    <span class="x-small opacity-50">{{ note.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                </div>
+                {% else %}
+                <p class="text-center opacity-50 py-4">No new notifications.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
